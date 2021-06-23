@@ -1,0 +1,47 @@
+<h1>Checkout</h1>
+
+Total number of items <%= @order.order_items.size %>
+
+<%= simple_form_for @order do |f| %>
+
+    <%= f.input :first_name %>
+    <%= f.input :last_name %>
+    <%= f.input :email %>
+    <%= f.input :country %>
+    <%= f.input :address_1 %>
+    <%= f.input :address_2 %>
+    <%= f.input :city %>
+    <%= f.input :postcode %>
+
+    <div id="card-errors"></div>
+
+    <div id="card"></div>
+    
+    <%= f.button :submit, "Submit order" %>
+<% end %>
+
+
+
+<script>
+
+var stripe = Stripe("pk_test_51HsOXkLzZFXpG8fpCiWuY9c60KcT3OZvaj8Z8xN1fuaUcktWTGP2Cofi9wcyQIyjJYGJ53Gkb89xK4bT2elgybtU00n48HIsMo");
+var elements = stripe.elements()
+
+var card = elements.create("card")
+
+card.mount("#card")
+
+$("form.new_order").on("submit", function (ev) {
+  ev.preventDefault()
+
+  stripe.createToken(card).then(function (result) {
+    if (result.error) {
+      $("#card-errors").html(result.error.message)
+    } else {
+      $("form.new_order").append("input type=hidden name='order[stripe_token]' value=" + result.token.id + ">")
+      $("form.new_order").get(0).submit()
+    }
+  })
+})
+
+</script>

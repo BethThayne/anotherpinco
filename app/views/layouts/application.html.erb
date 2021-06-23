@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Anotherpin</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+
+
+    <header>
+      <h1><%= link_to "Another Pin Co", root_path %></h1>
+
+
+      <nav>
+        <%= link_to "Shop", products_path %>
+        <%= link_to "Info", info_path %>
+        <%= link_to cart_path do %>
+          Cart (<%= number_to_currency @current_cart.total_price_in_euros, unit: "€" %>)
+        <% end %>
+      </nav>
+
+    </header>
+
+
+    <% if flash[:success].present? %>
+      <div class="flash-success">
+      <%= flash[:success] %>
+      </div>
+    <% end %>
+
+
+    <%= yield %>
+
+
+    <footer>
+      Copyright 2017
+    </footer>
+  </body>
+</html>
